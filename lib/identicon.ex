@@ -41,9 +41,13 @@ defmodule Identicon do
 
   """
   def pick_color(image_struct) do
+    # set the struct to have rgb and tail sections
     %Identicon.Image{hex: [r, g, b | _tail]} = image_struct
+    # join the normal struct with the color tuple(tuple to keep the order of data)
     %Identicon.Image{image_struct | color: {r, g, b}}
 
   end
+
+
 
 end
