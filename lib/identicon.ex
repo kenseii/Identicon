@@ -5,6 +5,7 @@ defmodule Identicon do
   def main(input) do
     input
     |> hash_input
+    |> pick_color
 
   end
 
@@ -28,4 +29,21 @@ defmodule Identicon do
     # Send to the struct
     %Identicon.Image{hex: hex}
   end
+
+
+  @doc"""
+  This function receives the struct and extract the RGB values.
+  Those RGB values are the first 3 elements stored in the struct.
+  It uses pattern matching and put the input's first 3 elements and set the rest as tail.
+
+  After that, it updates the struct to hold a `RGB tuple` and another list containing the hex numbers.
+
+
+  """
+  def pick_color(image_struct) do
+    %Identicon.Image{hex: [r, g, b | _tail]} = image_struct
+    %Identicon.Image{image_struct | color: {r, g, b}}
+
+  end
+
 end
