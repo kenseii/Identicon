@@ -1,21 +1,15 @@
 # Identicon
 
-**TODO: Add description**
+**Identicon generator from a given string**
 
-## Installation
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `identicon` to your list of dependencies in `mix.exs`:
+## Testing
 
-```elixir
-def deps do
-  [
-    {:identicon, "~> 0.1.0"}
-  ]
-end
-```
+To test go inside the application folder and run `mix test --cover`
 
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/identicon](https://hexdocs.pm/identicon).
+## Docs
 
+To generate the functions documentation go in the application folder,
+Then run `mix docs`
+
+Happy coding ;-)
