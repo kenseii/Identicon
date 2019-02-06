@@ -21,5 +21,21 @@ defmodule IdenticonTest do
 
   end
   # TODO add test for build_grid
+  test "test if the grid generates the 5x3 lists" do
+    assert Identicon.build_grid(
+             %Identicon.Image{
+               color: {114, 179, 2},
+               hex: [114, 179, 2, 191, 41, 122, 34, 138, 117, 115, 1, 35, 239, 239, 124, 65]
+             }
+           ) == [
+             [114, 179, 2],
+             [191, 41, 122],
+             [34, 138, 117],
+             [115, 1, 35],
+             [239, 239, 124],
+             'A'
+           ]
+
+  end
 
 end
