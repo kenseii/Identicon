@@ -1,12 +1,13 @@
 defmodule Identicon do
 
   # This function receives an `input string` to be hashed from the user,
-  # After that it pipes it in the hash_input method to change it to MD5
+  # After that it pipes it in the `hash_input` method to change it to MD5.
+  # the hashed list is piped in the `pick_color`
   def main(input) do
     input
     |> hash_input
     |> pick_color
-
+    |> build_grid
   end
 
 
@@ -48,6 +49,36 @@ defmodule Identicon do
 
   end
 
+  @doc """
+  This method creates a grid from the given struct of hex and color.
+  It changes the hex list to sets of 3 elements using `Enum.chunk_every(3)`.
 
+  After that it calls a `mirror_function` that duplicate the first 2 elements of the chunk to the right.
+  `[1,2,3]` becomes `[1,2,3,2,1]
+
+
+  """
+  def build_grid(%Identicon.Image{hex: hex} = image_struct) do
+    hex
+    |> Enum.chunk(3)
+      #|> Enum.chunk_every(hex,3)
+      # This also can work, but not that much functional
+      # Enum.chunk_every(image_struct.hex,3)
+    |> Enum.map(&mirror_rows/1)
+
+  end
+
+  @doc """
+  Duplicate the first 2 columns and put them in the end of the list.
+  `[1, 2, 3]` becomes `[1, 2, 3, 2, 1]`.
+  Note: It can do the same by using the Enum module, `.take` to take the first 2 elements,
+  and `.reverse` to reverse the first 2 elements then finally append it at the end using ++.
+
+  """
+  def mirror_rows(row) do
+    [first, second | _tail] = row
+    row ++ [second, first]
+
+  end
 
 end
