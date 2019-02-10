@@ -13,6 +13,34 @@ defmodule Identicon do
     |> pick_color
     |> build_grid
     |> filter_odd_squares
+    |> build_pixel_map
+  end
+
+  @doc """
+  A little bit of math is necessary here, starting vertical point = div(index,5)*50, starting horizontal point = rem(index, 5) * 50.
+  To get the end vertical and horizontal, we just take the starting points + 50px.
+  It uses `Enum.map` to loop inside the grid values and create coordinates `{start x,y; end x,y}`.
+  After that add it to the Image struct.
+
+  """
+
+  def build_pixel_map(%Identicon.Image{grid: grid} = image_struct) do
+    pixel_map = Enum.map grid, fn ({_value, index}) ->
+      horizontal = rem(index, 5) * 50
+      vertical = div(index, 5) * 50
+
+      # make a start point
+      top_left = {horizontal, vertical}
+      # make end point
+      bottom_right = {horizontal + 50, vertical + 50}
+
+      # return the coordinates
+      {top_left, bottom_right}
+
+    end
+    # Add it to the image struct
+    %Identicon.Image{image_struct | pixel_map: pixel_map}
+
   end
 
 
@@ -59,7 +87,7 @@ defmodule Identicon do
   It changes the hex list to sets of 3 elements using `Enum.chunk_every(3)`.
 
   After that it calls a `mirror_function` that duplicate the first 2 elements of the chunk to the right.
-  `[1,2,3]` becomes `[1,2,3,2,1].
+  `[1,2,3]` becomes `[1,2,3,2,1]`.
   Enum.map function here calls the `mirror_rows` and pass it every row like a for loop.
   After it changes the output of mirror_rows from a `list of lists` to a `single list of elements`.
   Lastly it appends the new grid value to the image struct
@@ -73,6 +101,7 @@ defmodule Identicon do
       # Enum.chunk_every(image_struct.hex,3)
       |> Enum.chunk(3)
         # Calls the mirror rows to duplicate the first 2 elements of every list at the end
+        # map executes on every enumerable
       |> Enum.map(&mirror_rows/1)
         # makes it a single list of elements
       |> List.flatten
