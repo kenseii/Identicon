@@ -8,7 +8,7 @@ defmodule Identicon do
   Call the `filter_odd_square` to remove all the odd values in the grid as only the even ones will be colored.
   Calls the `build_pixel_map` function to create pixel starting and ending points coordinates.
   Almost lastly it calls the `draw image` method to generate the identicon.
-  Finally it calls the `save_image` function to save the identicon to disk.
+  Finally it calls the `save_image` function to save the identicon to disk and pass it the `input string` and the `image`.
   """
   def main(input) do
     input
@@ -18,7 +18,7 @@ defmodule Identicon do
     |> filter_odd_squares
     |> build_pixel_map
     |> draw_image
-    |> save_image
+    |> save_image(input)
   end
 
   @doc """
@@ -178,6 +178,14 @@ defmodule Identicon do
     end
     # Render the Image
     :egd.render(image)
+
+  end
+
+  @doc """
+  This function saves the generated image to the disk.
+  """
+  def save_image(image, input) do
+    File.write("#{input}.png", image)
 
   end
 
