@@ -54,17 +54,24 @@ defmodule Identicon do
   It changes the hex list to sets of 3 elements using `Enum.chunk_every(3)`.
 
   After that it calls a `mirror_function` that duplicate the first 2 elements of the chunk to the right.
-  `[1,2,3]` becomes `[1,2,3,2,1]
+  `[1,2,3]` becomes `[1,2,3,2,1].
+  Enum.map function here calls the `mirror_rows` and pass it every row like a for loop.
+  Lastly it changes the output of mirror_rows from a `list of lists` to a `single list of elements`.
 
 
   """
   def build_grid(%Identicon.Image{hex: hex} = image_struct) do
     hex
     |> Enum.chunk(3)
-      #|> Enum.chunk_every(hex,3)
       # This also can work, but not that much functional
       # Enum.chunk_every(image_struct.hex,3)
     |> Enum.map(&mirror_rows/1)
+      # makes it a single list of elements
+    |> List.flatten
+      # add indexes to the flattened list
+    |> Enum.with_index
+
+
 
   end
 
@@ -76,7 +83,9 @@ defmodule Identicon do
 
   """
   def mirror_rows(row) do
+    # patter matching to get the 1st and 2nd
     [first, second | _tail] = row
+    # add it to the end
     row ++ [second, first]
 
   end
