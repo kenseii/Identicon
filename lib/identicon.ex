@@ -5,7 +5,10 @@ defmodule Identicon do
   after that it pipes it in the `hash_input` method to change it to MD5.
   The hashed list is piped in the `pick_color` that selects the first 3 elements of the list as RGB and sets it as a color section
   ,after setting the color section, it calls the build_grid method to create the final image struct.
-  Call the `filter_odd_square` to remove all the odd values in the grid as only the even ones will be colored
+  Call the `filter_odd_square` to remove all the odd values in the grid as only the even ones will be colored.
+  Calls the `build_pixel_map` function to create pixel starting and ending points coordinates.
+  Almost lastly it calls the `draw image` method to generate the identicon.
+  Finally it calls the `save_image` function to save the identicon to disk.
   """
   def main(input) do
     input
@@ -14,6 +17,8 @@ defmodule Identicon do
     |> build_grid
     |> filter_odd_squares
     |> build_pixel_map
+    |> draw_image
+    |> save_image
   end
 
   @doc """
@@ -152,6 +157,27 @@ defmodule Identicon do
     )
     # update the grid to only hold the even numbers
     %Identicon.Image{image_struct | grid: grid}
+
+  end
+
+  @doc """
+  This function generates an identicon image file from the image struct data.
+  It uses the Erlang builtin module feature.
+
+  """
+
+  def draw_image(%Identicon.Image{color: color, pixel_map: pixel_map}) do
+
+    # Create image space element
+    image = :egd.create(250, 250)
+    # pass in the color
+    fill = :egd.color(color)
+    # loop in pixel_map using .each, the difference with .map is that this one doesnt duplicate
+    Enum.each pixel_map, fn ({start, stop}) ->
+      :egd.filledRectangle(image, start, stop, fill)
+    end
+    # Render the Image
+    :egd.render(image)
 
   end
 
